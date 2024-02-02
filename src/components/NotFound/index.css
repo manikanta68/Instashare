@@ -1,0 +1,34 @@
+.notFoundContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.notFoundImage {
+  height: 173px;
+  width: 157px;
+}
+@media screen and (min-width: 1440px) {
+  .notFoundImage {
+    height: 297px;
+    width: 269px;
+  }
+}
+
+.homePageButton {
+  height: 32px;
+  width: 114px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #4094ef;
+  border-radius: 8px;
+  color: #ffffff;
+}
+@media screen and (min-width: 1440px) {
+  .homePageButton {
+    height: 48px;
+    width: 141px;
+    border-radius: 12px;
+  }
+}

@@ -1,0 +1,112 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 1440px) {
+  .loginContainer {
+    flex-direction: row;
+    height: 100vh;
+  }
+}
+.landingImageContainer {
+  display: none;
+}
+
+@media screen and (min-width: 1440px) {
+  .landingImageContainer {
+    display: flex;
+  }
+}
+.landingImage {
+  width: 582px;
+  height: 373px;
+}
+.mobileView {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 640px;
+}
+@media screen and (min-width: 1440px) {
+  .mobileView {
+    width: 456px;
+    height: 458px;
+  }
+}
+.instaShareLogoContainer {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.websiteLogoMV {
+  height: 40px;
+  width: 78px;
+  margin-bottom: 10px;
+}
+.instaShareHeading {
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  color: #262626;
+  margin: 0px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Roboto';
+  color: #262626;
+  margin-bottom: 6px;
+}
+
+.input {
+  height: 40px;
+  width: 312px;
+  background-color: #eeeeee;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+.passwordInput {
+  height: 40px;
+  width: 312px;
+  background-color: #eeeeee;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  padding-left: 10px;
+}
+
+.errorMsg {
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Roboto';
+}
+
+.button {
+  height: 40px;
+  width: 312px;
+  border-radius: 8px;
+  background-color: #4094ef;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 30px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+}
