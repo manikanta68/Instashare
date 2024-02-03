@@ -9,7 +9,7 @@ import Header from '../Header'
 
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import SearchContext from '../../context/SearchContext'
+
 import './index.css'
 
 const apiStatusConstants = {
@@ -230,7 +230,6 @@ class MyProfile extends Component {
     return (
       <div className="myProfileContainer">
         <Header />
-
         <div className="sliderShow">{this.renderUserProfile()}</div>
       </div>
     )
