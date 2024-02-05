@@ -7,9 +7,6 @@ import {BiCamera} from 'react-icons/bi'
 
 import Header from '../Header'
 
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-
 import './index.css'
 
 const apiStatusConstants = {
@@ -77,51 +74,46 @@ class MyProfile extends Component {
     console.log(userData)
     const settings = {
       dots: false,
-      slidesToShow: 3,
+      slidesToShow: 4,
       speed: 500,
-      infinite: true,
-      slidesToScroll: 3,
+      infinite: false,
+      slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 4,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+      ],
     }
 
     return (
       <div>
         <div className="userInfoAndSliderContainer">
-          <div className="userInfoContainerForMobile">
-            <p className="userName">{userData.userName}</p>
-
-            <div className="userFollowersFollowingContainer">
-              <img
-                className="userProfilePic"
-                src={userData.profilePic}
-                alt="user profile"
-              />
-              <div className="countContainer">
-                <div className="postCountContainer">
-                  <p className="postsCount">{userData.postsCount}</p>
-                  <p className="postsCount">posts</p>
-                </div>
-                <div className="postCountContainer">
-                  <p className="postsCount">{userData.followersCount}</p>
-                  <p className="postsCount">followers</p>
-                </div>
-                <div className="postCountContainer">
-                  <p className="postsCount">{userData.followingCount}</p>
-                  <p className="postsCount">following</p>
-                </div>
-              </div>
-            </div>
-            <p className="userId">{userData.userId}</p>
-            <p className="userBio">{userData.userBio}</p>
-          </div>
-
           <div className="userInfoContainerForDesktop">
             <img
               className="userProfilePicDesktop"
               src={userData.profilePic}
-              alt="user profile"
+              alt="my profile"
             />
             <div>
-              <p className="userNameDesktop">{userData.userName}</p>
+              <h1 className="userNameDesktop">{userData.userName}</h1>
               <div className="userFollowersFollowingContainer">
                 <div className="countContainer">
                   <div className="postCountContainerDesktop">
@@ -154,7 +146,7 @@ class MyProfile extends Component {
                   <img
                     className="userStoryImage"
                     src={each.image}
-                    alt="user story"
+                    alt="my story"
                   />
                 </div>
               ))}
@@ -165,7 +157,7 @@ class MyProfile extends Component {
         <div className="userPostsContainer">
           <div className="postsGridContainer">
             <BsGrid3X3 size={20} />
-            <p className="postsGridName">Posts</p>
+            <h1 className="postsGridName">Posts</h1>
           </div>
           {userData.posts.length > 0 ? (
             <ul className="userPostsUlListContainer">
@@ -174,7 +166,7 @@ class MyProfile extends Component {
                   <img
                     className="userPostImage"
                     src={each.image}
-                    alt="user post"
+                    alt="my post"
                   />
                 </li>
               ))}
@@ -184,7 +176,7 @@ class MyProfile extends Component {
               <div className="cameraIconContainer">
                 <BiCamera size={25} />
               </div>
-              <p>No Posts Yet</p>
+              <h1>No Posts</h1>
             </div>
           )}
         </div>
@@ -196,9 +188,9 @@ class MyProfile extends Component {
     <div className="failureViewContainer">
       <img
         src="https://res.cloudinary.com/djszohdjt/image/upload/v1706552284/alert-triangle_alvbje.png"
-        alt="alert"
+        alt="failure view"
       />
-      <h1>Something went wrong.Please try again</h1>
+      <p>Something went wrong. Please try again</p>
       <button className="retryButton" onClick={this.retryCalling} type="button">
         Try Again
       </button>
@@ -206,7 +198,7 @@ class MyProfile extends Component {
   )
 
   userProfileLoadingView = () => (
-    <div className="loader-container" data-testid="loader">
+    <div className="loader-container" testid="loader">
       <Loader type="TailSpin" color="#4094EF" height={50} width={50} />
     </div>
   )

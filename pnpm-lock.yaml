@@ -23,8 +23,6 @@ specifiers:
   react-router-dom: 5.3.0
   react-scripts: 4.0.3
   react-slick: 0.28.1
-  reactjs-popup: 2.0.6
-  slick-carousel: 1.8.1
 
 dependencies:
   '@testing-library/jest-dom': 5.11.9
@@ -41,8 +39,6 @@ dependencies:
   react-loader-spinner: 4.0.0_react-dom@17.0.1+react@17.0.1
   react-router-dom: 5.3.0_react@17.0.1
   react-slick: 0.28.1_react-dom@17.0.1+react@17.0.1
-  reactjs-popup: 2.0.6_react-dom@17.0.1+react@17.0.1
-  slick-carousel: 1.8.1
 
 devDependencies:
   eslint-config-airbnb: 18.2.1
@@ -11800,17 +11796,6 @@ packages:
       object-assign: 4.1.1
     dev: false
 
-  /reactjs-popup/2.0.6_react-dom@17.0.1+react@17.0.1:
-    resolution: {integrity: sha512-A+tt+x9wdgZiZjv0e2WzYLD3IfFwJALaRaqwrCSXGjo0iQdsry/EtBEbQXRSmQs7cHmOi5eytCiSlOm8k4C+dg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: '>=16'
-      react-dom: '>=16'
-    dependencies:
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-    dev: false
-
   /read-pkg-up/7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}
     engines: {node: '>=8'}
@@ -12604,12 +12589,6 @@ packages:
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
     dev: true
-
-  /slick-carousel/1.8.1:
-    resolution: {integrity: sha512-XB9Ftrf2EEKfzoQXt3Nitrt/IPbT+f1fgqBdoxO3W/+JYvtEOW6EgxnWfr9GH6nmULv7Y2tPmEX3koxThVmebA==}
-    peerDependencies:
-      jquery: '>=1.8.0'
-    dev: false
 
   /snapdragon-node/2.1.1:
     resolution: {integrity: sha512-O27l4xaMYt/RSQ5TR3vpWCAB5Kb/czIcqUFOM/C4fYcLnbZUc1PkjTAMjof2pBWaSTwOUd6qUHcFGVGj7aIwnw==}

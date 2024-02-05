@@ -18,17 +18,11 @@ class Header extends Component {
   }
 
   render() {
+    const {searchKitChange, searchKitValue, SearchViewChange} = this.props
     return (
       <SearchContext.Consumer>
         {value => {
-          const {
-            searchKitChange,
-            searchKit,
-            menu,
-            searchBar,
-            onChangeMenu,
-            onChangeSearch,
-          } = value
+          const {menu, searchBar, onChangeMenu, onChangeSearch} = value
 
           const onChangeSearchInputFunction = event => {
             searchKitChange(event.target.value)
@@ -40,6 +34,10 @@ class Header extends Component {
 
           const changeSearch = () => {
             onChangeSearch()
+          }
+
+          const changeSearchView = () => {
+            SearchViewChange()
           }
 
           return (
@@ -55,7 +53,7 @@ class Header extends Component {
                           alt="website logo"
                         />
                       </Link>
-                      <p className="navInstaShareHeading">Insta Share</p>
+                      <h1 className="navInstaShareHeading">Insta Share</h1>
                     </div>
                     <button
                       onClick={menuChange}
@@ -118,20 +116,17 @@ class Header extends Component {
                       <div className="searchBar">
                         {' '}
                         <input
-                          value={searchKit}
+                          value={searchKitValue}
                           onChange={onChangeSearchInputFunction}
                           className="searchInput"
                           type="search"
                           placeholder="Search caption"
                         />
                         <button
-                          onClick={() => {
-                            const {history} = this.props
-                            history.replace('/SearchPosts')
-                          }}
+                          onClick={changeSearchView}
                           className="searchButtonIcon"
                           type="button"
-                          //  testid="searchIcon"
+                          testid="searchIcon"
                         >
                           {}
                           <FaSearch />
@@ -149,7 +144,7 @@ class Header extends Component {
                         alt="website logo"
                       />
                     </Link>
-                    <p className="navInstaShareHeading">Insta Share</p>
+                    <h1 className="navInstaShareHeading">Insta Share</h1>
                   </div>
 
                   <div className="menusItems">
@@ -157,19 +152,16 @@ class Header extends Component {
                       {' '}
                       <input
                         placeholder="Search caption"
-                        value={searchKit}
+                        value={searchKitValue}
                         onChange={onChangeSearchInputFunction}
                         className="searchInput"
                         type="search"
                       />
                       <button
-                        // testid="searchIcon"
+                        testid="searchIcon"
                         className="searchButtonIcon"
                         type="button"
-                        onClick={() => {
-                          const {history} = this.props
-                          history.replace('/SearchPosts')
-                        }}
+                        onClick={changeSearchView}
                       >
                         {}
                         <FaSearch />

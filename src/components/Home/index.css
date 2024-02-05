@@ -15,21 +15,29 @@
   background-color: transparent;
   padding-bottom: 0px;
   padding-top: 10px;
+
+  max-width: 1100px;
 }
-@media screen and (min-width: 1220px) {
+/* .slick-prev: before,
+.slick-next: before {
+  color: black;
+} */
+@media screen and (min-width: 1440px) {
   .sliderContainer {
-    width: 80%;
+    width: 70%;
+    /* background-color: greenyellow; */
   }
   .hr {
     display: none;
   }
 }
 
-@media screen and (min-width: 1220px) {
+@media screen and (min-width: 1440px) {
   .sliderShow {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    /* background-color: lightyellow; */
   }
 }
 
@@ -88,6 +96,11 @@
 @media screen and (min-width: 1440px) {
   .renderPostsContainer {
     height: 70vh;
+    width: 100%;
+    /* background-color: lightblue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -105,15 +118,16 @@
   list-style-type: none;
   padding: 0px;
   overflow-y: scroll;
+  height: 450px;
 }
 @media screen and (min-width: 1440px) {
   .postsUlListContainer {
-    width: 80%;
+    width: 100%;
     overflow: unset;
     height: 50vh;
     display: flex;
     flex-direction: column;
-
+    /* background-color: red; */
     align-items: center;
   }
 }
@@ -203,4 +217,12 @@
 .commentsDescription {
   margin: 0px;
   margin-bottom: 3px;
+}
+
+.slick-prev: before {
+  color: red;
+}
+,
+.slick-next: before {
+  color: black;
 }

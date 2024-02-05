@@ -4,16 +4,15 @@ import {Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import {FcLike} from 'react-icons/fc'
-import {MdShare} from 'react-icons/md'
+import {BiShareAlt} from 'react-icons/bi'
+
 import {FaRegComment} from 'react-icons/fa'
 
 import {BsHeart} from 'react-icons/bs'
 
 import Header from '../Header'
-import SearchContext from '../../context/SearchContext'
-
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+// import SearchPosts from '../SearchPosts'
+// import SearchContext from '../../context/SearchContext'
 
 import './index.css'
 
@@ -30,12 +29,53 @@ class Home extends Component {
     storiesList: [],
     postsApiStatus: apiStatusConstants.initial,
     postsList: [],
-    likeStatus: false,
+
+    searchKit: '',
+    searchViewInitial: false,
+    apiLikeStatus: false,
+    apiPostId: '',
   }
 
   componentDidMount() {
     this.getStories()
     this.getPosts()
+  }
+
+  postsLike = async () => {
+    const {apiLikeStatus, apiPostId, postsList} = this.state
+    console.log(apiLikeStatus, apiPostId)
+    const url = `https://apis.ccbp.in/insta-share/posts/${apiPostId}/like`
+    const jwtToken = Cookies.get('jwt_token')
+
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify({like_status: apiLikeStatus}),
+    }
+    const response = await fetch(url, options)
+    const data = await response.json()
+    console.log('yemo', data.message)
+    const updatePostsList = postsList.map(eachPost => {
+      if (eachPost.postId === apiPostId) {
+        // console.log(eachPost)
+
+        //  console.log({...eachPost, likesCount: eachPost.likesCount +1})
+        if (data.message === 'Post has been liked') {
+          // console.log(eachPost)
+
+          return {...eachPost, like: true, likesCount: eachPost.likesCount + 1}
+        }
+        // console.log({...eachPost, likesCount: eachPost.likesCount - 1})
+        // console.log(eachPost)
+
+        return {...eachPost, like: false, likesCount: eachPost.likesCount - 1}
+      }
+      return eachPost
+    })
+    // console.log(updatePostsList)
+    this.setState({postsList: updatePostsList})
   }
 
   getStories = async () => {
@@ -68,8 +108,9 @@ class Home extends Component {
 
   getPosts = async () => {
     this.setState({postsApiStatus: apiStatusConstants.inprogress})
+    const {searchKit} = this.state
     const jwtToken = Cookies.get('jwt_token')
-    const url = 'https://apis.ccbp.in/insta-share/posts'
+    const url = `https://apis.ccbp.in/insta-share/posts?search=${searchKit}`
     const options = {
       method: 'GET',
       headers: {
@@ -89,6 +130,7 @@ class Home extends Component {
         profilePic: each.profile_pic,
         userId: each.user_id,
         userName: each.user_name,
+        like: false,
       }))
 
       this.setState({
@@ -98,6 +140,19 @@ class Home extends Component {
     } else {
       this.setState({postsApiStatus: apiStatusConstants.failure})
     }
+  }
+
+  searchKitChange = value => {
+    this.setState({searchKit: value})
+  }
+
+  SearchViewChange = () => {
+    this.setState(
+      prevState => ({
+        searchViewInitial: !prevState.searchViewInitial,
+      }),
+      this.getPosts,
+    )
   }
 
   retryCalling = () => {
@@ -111,8 +166,31 @@ class Home extends Component {
       dots: false,
       slidesToShow: 4,
       speed: 500,
-      infinite: true,
-      slidesToScroll: 4,
+      infinite: false,
+      slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 4,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+      ],
     }
 
     return (
@@ -125,7 +203,7 @@ class Home extends Component {
                 src={each.storyUrl}
                 alt="user story"
               />
-              <p className="userStoryName">{each.userName.slice(0, 5)}</p>
+              <p className="userStoryName">{each.userName}</p>
             </div>
           ))}
         </Slider>
@@ -137,9 +215,9 @@ class Home extends Component {
     <div className="failureViewContainer">
       <img
         src="https://res.cloudinary.com/djszohdjt/image/upload/v1706552284/alert-triangle_alvbje.png"
-        alt="alert"
+        alt="failure view"
       />
-      <h1>Something went wrong.Please try again</h1>
+      <p>Something went wrong. Please try again</p>
       <button className="retryButton" onClick={this.retryCalling} type="button">
         Try Again
       </button>
@@ -147,7 +225,7 @@ class Home extends Component {
   )
 
   storiesLoadingView = () => (
-    <div className="loader-container" data-testid="loader">
+    <div className="loader-container" testid="loader">
       <Loader type="TailSpin" color="#4094EF" height={50} width={50} />
     </div>
   )
@@ -171,76 +249,106 @@ class Home extends Component {
     this.getPosts()
   }
 
-  onChangeLike = () => {
-    this.setState(prevState => ({likeStatus: !prevState.likeStatus}))
-  }
+  //   onChangeLike = () => {
+  //     this.setState(prevState => ({likeStatus: !prevState.likeStatus}))
+  //   }
 
   postsSuccessView = () => {
-    const {postsList, likeStatus} = this.state
+    const {postsList, searchViewInitial} = this.state
 
+    if (postsList.length > 0) {
+      return (
+        <div>
+          {searchViewInitial && (
+            <h1 className="searchResultsPara">Search Results</h1>
+          )}
+
+          <ul className="postsUlListContainer">
+            {postsList.map(each => (
+              <li className="postListItem" key={each.postId}>
+                <div className="postItemsContainer">
+                  <div className="profileContainer">
+                    <img
+                      className="profilePic"
+                      src={each.profilePic}
+                      alt="post author profile"
+                    />
+                    <Link to={`/users/${each.userId}`}>
+                      <h1 className="profileName">{each.userName}</h1>
+                    </Link>
+                  </div>
+                  <img
+                    className="postImage"
+                    src={each.postDetails.image_url}
+                    alt="post"
+                  />
+                  <div className="likesContainer">
+                    <button
+                      onClick={() => {
+                        if (each.like === false) {
+                          this.setState(
+                            {
+                              apiLikeStatus: true,
+                              apiPostId: each.postId,
+                            },
+                            this.postsLike,
+                          )
+                        } else {
+                          this.setState(
+                            {
+                              apiLikeStatus: false,
+                              apiPostId: each.postId,
+                            },
+                            this.postsLike,
+                          )
+                        }
+                      }}
+                      className="likeButton"
+                      type="button"
+                      testid={each.like ? 'unLikeIcon' : 'likeIcon'}
+                    >
+                      {' '}
+                      {each.like ? <FcLike size={17} /> : <BsHeart size={17} />}
+                      {}
+                    </button>
+
+                    <FaRegComment className="comment" />
+                    <BiShareAlt className="share" />
+                  </div>
+
+                  <p className="likes">{each.likesCount} likes</p>
+
+                  <p className="likes">{each.postDetails.caption}</p>
+                  <ul className="commentsContainer">
+                    {each.comments.map(comment => (
+                      <li key={comment.user_id}>
+                        <p className="commentsDescription">
+                          <span className="commentSpan">
+                            {comment.user_name}
+                          </span>{' '}
+                          {comment.comment}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="likes">{each.createdAt}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
     return (
-      <ul className="postsUlListContainer">
-        {postsList.map(each => (
-          <li className="postListItem" key={each.postId}>
-            <div className="postItemsContainer">
-              <div className="profileContainer">
-                <img
-                  className="profilePic"
-                  src={each.profilePic}
-                  alt="post author profile"
-                />
-                <Link to={`users/${each.userId}`}>
-                  <h1 className="profileName">{each.userName}</h1>
-                </Link>
-              </div>
-              <img
-                className="postImage"
-                src={each.postDetails.image_url}
-                alt="post"
-              />
-              <div className="likesContainer">
-                {likeStatus ? (
-                  <button
-                    onClick={this.onChangeLike}
-                    className="likeButton"
-                    type="button"
-                    //   testid="unLikeIcon"
-                  >
-                    <FcLike size={17} />
-                    {}
-                  </button>
-                ) : (
-                  <button
-                    //  testid="likeIcon"
-                    onClick={this.onChangeLike}
-                    className="likeButton"
-                    type="button"
-                  >
-                    <BsHeart size={17} />
-                    {}
-                  </button>
-                )}
-
-                <FaRegComment className="comment" />
-                <MdShare className="share" />
-              </div>
-              <p className="likes">{each.likesCount} likes</p>
-              <p className="likes">{each.postDetails.caption}</p>
-              <ul className="commentsContainer">
-                {each.comments.map(comment => (
-                  <li key={comment.user_id}>
-                    <p className="commentsDescription">
-                      <span className="commentSpan">{comment.user_name}</span>{' '}
-                      {comment.comment}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-              <p className="likes">{each.createdAt}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="failureViewContainer">
+        <img
+          className="searchNotFoundImage"
+          src="https://res.cloudinary.com/djszohdjt/image/upload/v1706887315/Group_lestmc.png"
+          alt="search not found"
+        />
+        <h1>Search Not Found</h1>
+        <p>Try different keyword or search again</p>
+      </div>
     )
   }
 
@@ -248,21 +356,21 @@ class Home extends Component {
     <div className="failureViewContainer">
       <img
         src="https://res.cloudinary.com/djszohdjt/image/upload/v1706552284/alert-triangle_alvbje.png"
-        alt="alert"
+        alt="failure view"
       />
-      <h1>Something went wrong.Please try again</h1>
+      <p>Something went wrong. Please try again</p>
       <button
         className="retryButton"
         onClick={this.retryPostsCalling}
         type="button"
       >
-        Try Again
+        Try again
       </button>
     </div>
   )
 
   postsLoadingView = () => (
-    <div className="loader-container">
+    <div className="loader-container" testid="loader">
       <Loader type="TailSpin" color="#4094EF" height={50} width={50} />
     </div>
   )
@@ -283,22 +391,23 @@ class Home extends Component {
   }
 
   render() {
+    const {searchViewInitial, searchKit} = this.state
     return (
       <div className="homeContainer">
-        <Header />
-        <SearchContext.Consumer>
-          {value => {
-            const {searchViewInitial} = value
+        <Header
+          searchKitChange={this.searchKitChange}
+          SearchViewChange={this.SearchViewChange}
+          searchKitValue={searchKit}
+        />
 
-            return searchViewInitial ? null : (
-              <div>
-                <div className="sliderShow">{this.renderStories()}</div>
-                <hr className="hr" />
-                <div className="renderPostsContainer">{this.renderPosts()}</div>
-              </div>
-            )
-          }}
-        </SearchContext.Consumer>
+        {searchViewInitial ? null : (
+          <div>
+            <div className="sliderShow">{this.renderStories()}</div>
+            <hr className="hr" />
+          </div>
+        )}
+
+        <div className="renderPostsContainer">{this.renderPosts()}</div>
       </div>
     )
   }
