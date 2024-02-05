@@ -11,8 +11,6 @@ import {FaRegComment} from 'react-icons/fa'
 import {BsHeart} from 'react-icons/bs'
 
 import Header from '../Header'
-// import SearchPosts from '../SearchPosts'
-// import SearchContext from '../../context/SearchContext'
 
 import './index.css'
 
@@ -43,7 +41,6 @@ class Home extends Component {
 
   postsLike = async () => {
     const {apiLikeStatus, apiPostId, postsList} = this.state
-    console.log(apiLikeStatus, apiPostId)
     const url = `https://apis.ccbp.in/insta-share/posts/${apiPostId}/like`
     const jwtToken = Cookies.get('jwt_token')
 
@@ -56,25 +53,17 @@ class Home extends Component {
     }
     const response = await fetch(url, options)
     const data = await response.json()
-    console.log('yemo', data.message)
+
     const updatePostsList = postsList.map(eachPost => {
       if (eachPost.postId === apiPostId) {
-        // console.log(eachPost)
-
-        //  console.log({...eachPost, likesCount: eachPost.likesCount +1})
         if (data.message === 'Post has been liked') {
-          // console.log(eachPost)
-
           return {...eachPost, like: true, likesCount: eachPost.likesCount + 1}
         }
-        // console.log({...eachPost, likesCount: eachPost.likesCount - 1})
-        // console.log(eachPost)
 
         return {...eachPost, like: false, likesCount: eachPost.likesCount - 1}
       }
       return eachPost
     })
-    // console.log(updatePostsList)
     this.setState({postsList: updatePostsList})
   }
 
@@ -120,7 +109,6 @@ class Home extends Component {
     const response = await fetch(url, options)
     if (response.ok === true) {
       const data = await response.json()
-      console.log(data)
       const updatePosts = data.posts.map(each => ({
         comments: each.comments,
         createdAt: each.created_at,
@@ -248,10 +236,6 @@ class Home extends Component {
   retryPostsCalling = () => {
     this.getPosts()
   }
-
-  //   onChangeLike = () => {
-  //     this.setState(prevState => ({likeStatus: !prevState.likeStatus}))
-  //   }
 
   postsSuccessView = () => {
     const {postsList, searchViewInitial} = this.state
