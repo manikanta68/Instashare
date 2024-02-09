@@ -218,11 +218,3 @@
   margin: 0px;
   margin-bottom: 3px;
 }
-
-.slick-prev: before {
-  color: red;
-}
-,
-.slick-next: before {
-  color: black;
-}

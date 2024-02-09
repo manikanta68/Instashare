@@ -53,18 +53,30 @@ class Home extends Component {
     }
     const response = await fetch(url, options)
     const data = await response.json()
-
-    const updatePostsList = postsList.map(eachPost => {
-      if (eachPost.postId === apiPostId) {
-        if (data.message === 'Post has been liked') {
-          return {...eachPost, like: true, likesCount: eachPost.likesCount + 1}
+    console.log(response)
+    console.log(data)
+    if (response.ok === true) {
+      const updatePostsList = postsList.map(eachPost => {
+        if (eachPost.postId === apiPostId) {
+          if (data.message === 'Post has been liked') {
+            return {
+              ...eachPost,
+              like: true,
+              likesCount: eachPost.likesCount + 1,
+            }
+          }
+          if (data.message === 'Post has been disliked') {
+            return {
+              ...eachPost,
+              like: false,
+              likesCount: eachPost.likesCount - 1,
+            }
+          }
         }
-
-        return {...eachPost, like: false, likesCount: eachPost.likesCount - 1}
-      }
-      return eachPost
-    })
-    this.setState({postsList: updatePostsList})
+        return eachPost
+      })
+      this.setState({postsList: updatePostsList})
+    }
   }
 
   getStories = async () => {

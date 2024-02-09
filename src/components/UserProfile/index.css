@@ -274,10 +274,10 @@
   border-width: 1px;
 }
 
-.slick-prev: before {
+::slick-prev before {
   color: red;
 }
-,
-.slick-next: before {
+
+::slick-next before {
   color: black;
 }
